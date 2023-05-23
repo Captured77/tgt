@@ -698,6 +698,7 @@ static struct backingstore_template ssc_bst = {
 	.bs_cmd_submit		= bs_thread_cmd_submit,
 };
 
+// 注册ssc bst
 __attribute__((constructor)) static void bs_ssc_constructor(void)
 {
 	register_backingstore_template(&ssc_bst);

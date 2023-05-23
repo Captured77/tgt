@@ -670,6 +670,7 @@ static struct iscsi_transport iscsi_tcp = {
 	.ep_nop_reply		= iscsi_tcp_nop_reply,
 };
 
+// 注册iscsi_tcp 传输层
 __attribute__((constructor)) static void iscsi_transport_init(void)
 {
 	iscsi_transport_register(&iscsi_tcp);

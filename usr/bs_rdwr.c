@@ -443,6 +443,7 @@ static struct backingstore_template smc_bst = {
 	.bs_oflags_supported    = O_SYNC | O_DIRECT,
 };
 
+// 注册tdwr、mmc、smc等bst
 __attribute__((constructor)) static void bs_rdwr_constructor(void)
 {
 	unsigned char sbc_opcodes[] = {

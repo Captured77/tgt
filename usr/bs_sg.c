@@ -519,6 +519,7 @@ static struct device_type_template sg_template = {
 	.cmd_passthrough	= bs_sg_rw,
 };
 
+// 注册sg、bsg等bst,注册sg设备类型
 __attribute__((constructor)) static void bs_sg_constructor(void)
 {
 	register_backingstore_template(&sg_bst);

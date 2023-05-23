@@ -56,6 +56,7 @@ static struct backingstore_template null_bst = {
 	.bs_cmd_submit		= bs_null_cmd_submit,
 };
 
+// 注册null bst
 __attribute__((constructor)) static void bs_null_constructor(void)
 {
 	register_backingstore_template(&null_bst);

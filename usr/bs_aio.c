@@ -422,6 +422,7 @@ static struct backingstore_template aio_bst = {
 	.bs_cmd_submit  	= bs_aio_cmd_submit,
 };
 
+// 注册aio bst
 __attribute__((constructor)) static void register_bs_module(void)
 {
 	unsigned char opcodes[] = {

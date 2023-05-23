@@ -376,6 +376,7 @@ static struct device_type_template ssc_template = {
 	}
 };
 
+// 注册ssc 设备类型
 __attribute__((constructor)) static void ssc_init(void)
 {
 	device_type_register(&ssc_template);

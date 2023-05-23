@@ -1479,6 +1479,7 @@ static struct backingstore_template sheepdog_bst = {
 	.bs_cmd_submit		= bs_thread_cmd_submit,
 };
 
+// 注册ssc bst
 __attribute__((constructor)) static void __constructor(void)
 {
 	unsigned char opcodes[] = {

@@ -987,6 +987,7 @@ struct device_type_template smc_template = {
 	}
 };
 
+// 注册smc 设备类型
 __attribute__((constructor)) static void smc_init(void)
 {
 	device_type_register(&smc_template);

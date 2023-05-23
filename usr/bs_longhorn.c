@@ -277,6 +277,7 @@ static struct backingstore_template longhorn_bst = {
 	.bs_oflags_supported    = O_SYNC | O_DIRECT | O_RDWR,
 };
 
+// 注册 aio bst
 __attribute__((constructor)) void register_bs_module(void)
 {
 	unsigned char opcodes[] = {

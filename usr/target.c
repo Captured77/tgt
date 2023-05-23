@@ -2461,6 +2461,7 @@ int is_system_inactive(void)
 	return list_empty(&target_list);
 }
 
+// 设置global_target 全局变量
 static void __attribute__((constructor)) target_constructor(void)
 {
 	static int global_target_aids[DEFAULT_NR_ACCOUNT];

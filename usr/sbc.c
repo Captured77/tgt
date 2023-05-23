@@ -969,6 +969,7 @@ static struct device_type_template sbc_template = {
 	}
 };
 
+// 注册sbc 设备类型
 __attribute__((constructor)) static void sbc_init(void)
 {
 	device_type_register(&sbc_template);

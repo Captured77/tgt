@@ -2461,6 +2461,7 @@ static struct device_type_template mmc_template = {
 	}
 };
 
+// 注册mmc 设备类型
 __attribute__((constructor)) static void mmc_init(void)
 {
 	device_type_register(&mmc_template);

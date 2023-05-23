@@ -144,6 +144,7 @@ static struct device_type_template osd_template = {
 	}
 };
 
+// 注册osd设备类型
 __attribute__((constructor)) static void osd_init(void)
 {
 	device_type_register(&osd_template);
