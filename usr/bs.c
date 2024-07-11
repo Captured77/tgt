@@ -328,7 +328,7 @@ static int bs_init_signalfd(void)
 	}
 
 	// 创建signalfd
-	sig_fd = signalfd(-1, &mask, O_NONBLOCK);
+	sig_fd = __signalfd(-1, &mask, O_NONBLOCK);
 	if (sig_fd < 0) {
 		eprintf("signalfd creation failed with error %d\n", errno);
 		return 1;
