@@ -261,14 +261,17 @@ static int bs_init_signalfd(void)
 	int ret;
 	DIR *dir;
 
+	// 打开存储模块目录
 	dir = opendir(BSDIR);
 	if (dir == NULL) {
 		/* not considered an error if there are no modules */
+		// 如果目录不存在，不认为是错误
 		dprintf("could not open backing-store module directory %s\n",
 			BSDIR);
 	} else {
 		struct dirent *dirent;
 		void *handle;
+		// 跳过以. 开头的文件
 		while ((dirent = readdir(dir))) {
 			char *soname;
 			void (*register_bs_module)(void);
@@ -276,13 +279,14 @@ static int bs_init_signalfd(void)
 			if (dirent->d_name[0] == '.') {
 				continue;
 			}
-
+			// 生成模块文件的完整路径
 			ret = asprintf(&soname, "%s/%s", BSDIR,
 					dirent->d_name);
 			if (ret == -1) {
 				eprintf("out of memory\n");
 				continue;
 			}
+			// 动态加载模块
 			handle = dlopen(soname, RTLD_NOW|RTLD_LOCAL);
 			if (handle == NULL) {
 				eprintf("failed to dlopen backing-store "
@@ -291,6 +295,7 @@ static int bs_init_signalfd(void)
 				free(soname);
 				continue;
 			}
+			// 获取模块中的注册函数
 			register_bs_module = dlsym(handle, "register_bs_module");
 			if (register_bs_module == NULL) {
 				eprintf("could not find register_bs_module "
@@ -299,29 +304,47 @@ static int bs_init_signalfd(void)
 				free(soname);
 				continue;
 			}
+			// 调用注册函数
 			register_bs_module();
 			free(soname);
 		}
 		closedir(dir);
 	}
 
-	pthread_mutex_init(&finished_lock, NULL);
+	// 打开信号文件
+	ret = pthread_mutex_init(&finished_lock, NULL);
+	if (ret != 0) {
+		eprintf("failed to create finished_lock, %d\n", ret);
+        return 1;
+	}
 
+	//设置信号屏蔽
 	sigemptyset(&mask);
 	sigaddset(&mask, SIGUSR2);
-	sigprocmask(SIG_BLOCK, &mask, NULL);
+	ret = sigprocmask(SIG_BLOCK, &mask, NULL);
+	if (ret != 0 ) {
+		eprintf("failed to set signal mask, %d\n", ret);
+        return 1;
+	}
 
-	sig_fd = __signalfd(-1, &mask, 0);
-	if (sig_fd < 0)
+	// 创建signalfd
+	sig_fd = signalfd(-1, &mask, O_NONBLOCK);
+	if (sig_fd < 0) {
+		eprintf("signalfd creation failed with error %d\n", errno);
 		return 1;
+	}
 
+	// 将signalfd 加入到事件循环中
 	ret = tgt_event_add(sig_fd, EPOLLIN, bs_sig_request_done, NULL);
 	if (ret < 0) {
+		eprintf("tgt_event_add failed with error %d\n", ret);
 		close (sig_fd);
 		sig_fd = -1;
 
 		return 1;
 	}
+	
+	dprintf("bs_init_signalfd successfully initialized\n");
 
 	return 0;
 }
