@@ -266,7 +266,7 @@ static int bs_init_signalfd(void)
 	if (dir == NULL) {
 		/* not considered an error if there are no modules */
 		// 如果目录不存在，不认为是错误
-		dprintf("could not open backing-store module directory %s\n",
+		eprintf("could not open backing-store module directory %s\n",
 			BSDIR);
 	} else {
 		struct dirent *dirent;
