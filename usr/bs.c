@@ -344,7 +344,7 @@ static int bs_init_signalfd(void)
 		return 1;
 	}
 	
-	dprintf("bs_init_signalfd successfully initialized\n");
+	eprintf("bs_init_signalfd successfully initialized\n");
 
 	return 0;
 }
@@ -404,6 +404,8 @@ destroy_cond_mutex:
 int bs_init(void)
 {
 	int ret;
+
+	eprintf("I am comming bs_init\n");
 
 	ret = bs_init_signalfd();
 	if (!ret) {
